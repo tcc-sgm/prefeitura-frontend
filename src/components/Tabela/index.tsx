@@ -6,7 +6,7 @@ import { Container, TBoby } from './styles';
 
 interface ColunaProps {
     campos: string[];
-    dados: string[][];
+    dados: string[][] | undefined;
 }
 
 const Table: React.FC<ColunaProps> = ({dados, campos}) => {
@@ -15,11 +15,17 @@ const Table: React.FC<ColunaProps> = ({dados, campos}) => {
     <Container >
       <table>
         <TbHeader campos={campos}/>
-        <TBoby>       
-           {dados.map((dado) => (
-            <Row dados={dado} />
-           ))}
-        </TBoby>
+        { 
+          dados === undefined ? 
+          <TBoby> 
+            Nenhum Resultado encontrado 
+          </TBoby> :  
+          <TBoby>       
+            {dados.map((dado) => (
+              <Row dados={dado} />
+            ))}
+          </TBoby> 
+        }
       </table>
 
     </Container>

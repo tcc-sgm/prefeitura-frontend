@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import { FaFileSignature, FaClipboardList } from 'react-icons/fa';
 
 import { Form } from '@unform/web';
@@ -10,25 +10,28 @@ import { useToast } from '../../hooks/toast';
 
 import Select from '../../components/Select';
 import Button from '../../components/Button';
+import getValidationErrors from '../../utils/getValidationErros';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
 import Header from '../../components/Header';
 import Input from '../../components/Input';
 import Table from '../../components/Tabela';
+import { findIPTU, findITR } from '../../services/citizens';
 
-interface SignInFormData {
-  email: string;
-  password: string;
+interface FindImpostoFormData {
+  tipo_imposto: string;
+  inscricao: string;
 }
 
+
 const Taxes: React.FC = () => {
-
+  
+  const [ dados, setDados ] = useState<Array<string[]> |undefined>(undefined);
   const formRef = useRef<FormHandles>(null);
-
   const { addToast } = useToast();
   const history = useHistory();
 
-  const handleSubmit = useCallback(async (data: SignInFormData) => {
+  const handleSubmit = useCallback(async (data: FindImpostoFormData) => {
     try {
       formRef.current?.setErrors({});
 
@@ -40,9 +43,23 @@ const Taxes: React.FC = () => {
         abortEarly: false,
       });
 
-      history.push('/dashboard')
+      const inscricao = formRef.current?.getFieldValue('inscricao');
+      const tipo = formRef.current?.getFieldValue('tipo_imposto');
+      const cpf = '46406708776';
+      
+      if (tipo === 'IPTU') {
+        setDados(await findIPTU(cpf, inscricao));
+      } else {
+        setDados(await findITR(cpf, inscricao));
+      }
+      
     } catch (err) {
 
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err);
+        formRef.current?.setErrors(errors);
+        return ;
+      }
       addToast({
         type: 'error',
         title: 'Erro na Consulta',
@@ -50,7 +67,7 @@ const Taxes: React.FC = () => {
       });
 
     }
-  }, [ addToast, history ]);
+  }, [ addToast, history, dados ]);
   return (
     <Container>
       <Header/>
@@ -60,17 +77,17 @@ const Taxes: React.FC = () => {
             <Form ref={formRef} onSubmit={handleSubmit}>
               <h1>Consultar Imposto</h1>
 
-              <Select name="Tipo Imposto" icon={FaClipboardList} options={['IPTU', 'ITR']} />
+              <Select name="tipo_imposto" icon={FaClipboardList} options={['IPTU', 'ITR']} />
 
               <Input
                 name="inscricao"
                 icon={FaFileSignature}
                 placeholder="Inscrição" />
 
-              <Button type="submit">Cadastrar</Button>
+              <Button type="submit">Consultar</Button>
             </Form>
 
-            <Table dados={DADOS} campos={CAMPOS}/>
+            <Table dados={dados} campos={CAMPOS}/>
         </AnimationContainer>
       </Content>
 
@@ -80,8 +97,6 @@ const Taxes: React.FC = () => {
   );
 }
 
-const CAMPOS = ["Inscrição", "Tipo", "Valor", "Ano", "Situação"];
-const DADOS = [["12313133", "IPTU", "1350,00", "2020","EM ABERTO"], ["12313133", "IPTU", "1205,00", "2019", "EM ABERTO"], ["12313133", "IPTU", "1115,00", "2018", "PAGO"]];
-
+const CAMPOS = ["Inscrição", "Tipo", "Valor(R$)", "Ano", "Tamanho (mº2)",  "Cidade", "Estado", "CEP"];
 
 export default Taxes;
