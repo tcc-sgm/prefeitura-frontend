@@ -4,7 +4,7 @@ import { Switch } from 'react-router-dom';
 import Route from './Route';
 
 import SignIn from '../pages/SignIn';
-import SignOut from '../pages/SignUp';
+import SignUp from '../pages/SignUp';
 
 import SearchProtocol from '../pages/Catalog/SearchProtocol';
 import AddProtocol from '../pages/Catalog/AddProtocol';
@@ -14,7 +14,7 @@ import Taxes from '../pages/Taxes/indes';
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={SignIn}/>
-    <Route path="/signup" component={SignOut}/>
+    <Route path="/signup" component={SignUp}/>
     <Route path="/protocolos/consulta" component={SearchProtocol} />
     <Route path="/protocolos/cadastro" component={AddProtocol} />
     <Route path="/protocolos/detalhe" component={DetailProtocol} />

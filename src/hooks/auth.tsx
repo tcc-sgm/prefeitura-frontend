@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
-import api from '../services/api';
+import auth from '../services/auth';
 
 interface SignInCredentials {
   email: string;
@@ -23,8 +23,8 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const [ data, setData ] = useState<AuthState>(() => {
 
-    const token = localStorage.getItem('@GoBarder:token');
-    const user = localStorage.getItem('@GoBarber:user');
+    const token = localStorage.getItem('@Prefeitura:token');
+    const user = localStorage.getItem('@Prefeitura:user');
 
     if (token && user) {
       return { token, user: JSON.parse(user) }
@@ -34,23 +34,25 @@ const AuthProvider: React.FC = ({ children }) => {
   });
 
   const signIn = useCallback(async ({ email, password }) => {
-    const response = await api.post('sessions', {
-      email,
+
+    const response = await auth.post('/users/signin', {
+      username: email,
       password,
     });
-
+    console.log(response.status);
+    
     const { token, user } = response.data;
 
-    localStorage.setItem('@GoBarder:token', token);
-    localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+    localStorage.setItem('@Prefeitura:token', token);
+    localStorage.setItem('@Prefeitura:user', JSON.stringify(user));
 
     setData ({ token, user });
   }, []);
 
   const signOut = useCallback(() => {
 
-    localStorage.removeItem('@GoBarder:token');
-    localStorage.removeItem('@GoBarber:user');
+    localStorage.removeItem('@Prefeitura:token');
+    localStorage.removeItem('@Prefeitura:user');
 
     setData({} as AuthState);
 

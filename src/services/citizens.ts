@@ -1,7 +1,4 @@
-import { number, string } from 'yup/lib/locale';
 import api from './api';
-
-const DADOS = [["12313133", "IPTU", "1350,00", "2020","EM ABERTO"], ["12313133", "IPTU", "1205,00", "2019", "EM ABERTO"], ["12313133", "IPTU", "1115,00", "2018", "PAGO"]];
 
 interface IDadosImposto {
     proprietario: string;
