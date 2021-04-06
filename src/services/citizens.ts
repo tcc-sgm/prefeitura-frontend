@@ -18,7 +18,7 @@ interface IDadosImposto {
 
 export const findIPTU = async function findIPTU(cpf:string, inscricao: string) {
     try {
-        const  resultado = await api.get(`/cidadao/imposto/iptu/cpf/${cpf}/inscricao/${inscricao}`);
+        const resultado = await api.get(`/cidadao/imposto/iptu/cpf/${cpf}/inscricao/${inscricao}`);
         
         if (resultado.status === 200) {
             let itens: Array<string[]> = [];

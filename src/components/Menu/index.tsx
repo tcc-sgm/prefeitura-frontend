@@ -11,14 +11,14 @@ const Menu:  React.FC = ()=> {
         <nav>
             <ul>
                 <li>
-                    <NavLink to="/protocolos/consulta" 
-                        activeClassName="cursor-pointer text-orange-400"> Consultar serviço
+                    <NavLink to="/notices/view" 
+                        activeClassName="cursor-pointer text-orange-400"> Noticias
                     </NavLink>
                 </li>
-                        
+
                 <li>
-                    <NavLink to="/protocolos/cadastro" 
-                        activeClassName="cursor-pointer text-orange-400"> Solicitar serviço
+                    <NavLink to="/notices/add" 
+                        activeClassName="cursor-pointer text-orange-400"> Cadastrar Noticias
                     </NavLink>
                 </li>
 

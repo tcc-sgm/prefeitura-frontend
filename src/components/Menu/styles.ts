@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   
-  margin-left:auto;
+  margin:auto;
   nav {
     color: #326DDC;
     border-color: #326DDC;    

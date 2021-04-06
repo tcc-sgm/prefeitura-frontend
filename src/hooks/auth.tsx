@@ -39,7 +39,6 @@ const AuthProvider: React.FC = ({ children }) => {
       username: email,
       password,
     });
-    console.log(response.status);
     
     const { token, user } = response.data;
 
