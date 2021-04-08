@@ -9,10 +9,10 @@ interface ColunaProps {
 const TbHeader: React.FC<ColunaProps> = ({campos}) => {
 
   return (
-    <THeader>
+    <THeader key="idHTabela">
       <tr>
         {campos.map((coluna) => (
-            <th>{coluna}</th>
+            <th key={coluna}>{coluna}</th>
           ))}
       </tr>
       </THeader>

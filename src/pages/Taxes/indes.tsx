@@ -4,7 +4,6 @@ import { FaFileSignature, FaClipboardList } from 'react-icons/fa';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
 
 import { useToast } from '../../hooks/toast';
 
@@ -23,13 +22,11 @@ interface FindImpostoFormData {
   inscricao: string;
 }
 
-
 const Taxes: React.FC = () => {
   
   const [ dados, setDados ] = useState<Array<string[]> |undefined>(undefined);
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
-  const history = useHistory();
 
   const handleSubmit = useCallback(async (data: FindImpostoFormData) => {
     try {
@@ -45,12 +42,11 @@ const Taxes: React.FC = () => {
 
       const inscricao = formRef.current?.getFieldValue('inscricao');
       const tipo = formRef.current?.getFieldValue('tipo_imposto');
-      const cpf = '46406708776';
       
       if (tipo === 'IPTU') {
-        setDados(await findIPTU(cpf, inscricao));
+        setDados(await findIPTU(inscricao));
       } else {
-        setDados(await findITR(cpf, inscricao));
+        setDados(await findITR(inscricao));
       }
       
     } catch (err) {
@@ -67,7 +63,7 @@ const Taxes: React.FC = () => {
       });
 
     }
-  }, [ addToast, history, dados ]);
+  }, [ addToast ]);
   return (
     <Container>
       <Header/>

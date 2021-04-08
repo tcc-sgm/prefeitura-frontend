@@ -46,7 +46,7 @@ const Select: React.FC<SelectProps> = ({name, icon: Icon, options, ...rest}) => 
           defaultValue={ defaultValue }
           ref={inputRef} { ...rest } >
             {options.map(v => (
-                  <option >{v}</option>
+                  <option key={v} >{v}</option>
               ))
             }
         </select>

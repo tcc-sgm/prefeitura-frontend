@@ -16,9 +16,21 @@ interface IDadosImposto {
     inscricao: number;
 }
 
-export const findIPTU = async function findIPTU(cpf:string, inscricao: string) {
+export const findIPTU = async function findIPTU(inscricao: string) {
     try {
-        const resultado = await api.get(`/cidadao/imposto/iptu/cpf/${cpf}/inscricao/${inscricao}`);
+        const token = localStorage.getItem('@Prefeitura:token');
+        let header = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+                "Authorization": token
+            }
+        };
+        const user = localStorage.getItem('@Prefeitura:user');
+        const { cpf } = user ? JSON.parse(user) : '';
+        console.log(cpf);
+        
+        const resultado = await api.get(`/impostos/iptu/cpf/${cpf}/inscricao/${inscricao}`, header);
         
         if (resultado.status === 200) {
             let itens: Array<string[]> = [];
@@ -43,12 +55,15 @@ export const findIPTU = async function findIPTU(cpf:string, inscricao: string) {
     return undefined;
 }
 
-export const findITR = async function findITR(cpf:string, inscricao: string) {
-    const resultado = await api.get(`/cidadao/imposto/itr/cpf/${cpf}/inscricao/${inscricao}`);
+export const findITR = async function findITR(inscricao: string) {
+   
+    const user = localStorage.getItem('@Prefeitura:user');
+    const { cpf } = user ? JSON.parse(user) : '';
+    const resultado = await api.get(`/impostos/itr/cpf/${cpf}/inscricao/${inscricao}`);
+   
     if (resultado.status === 200) {
         let itens: Array<string[]> = [];
         const dados: Array<IDadosImposto> = resultado.data;
-        dados.forEach(element => {
             dados.forEach(element => {
                 itens.push([element.inscricao.toString(), 
                             element.tipoImposto,
@@ -59,8 +74,6 @@ export const findITR = async function findITR(cpf:string, inscricao: string) {
                             element.estado,
                             element.cep]);
             });
-        });
-        
         return itens;
     }
     return undefined;

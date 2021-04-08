@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { FaFileSignature, FaClipboardList } from 'react-icons/fa';
+import { FaFileSignature } from 'react-icons/fa';
 
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -42,7 +42,7 @@ const AddNotice: React.FC = () => {
         abortEarly: false,
       });
 
-      const response = await api.post('/noticias', {
+      await api.post('/noticias', {
         titulo: data.titulo,
         conteudo: data.descricao,
       });

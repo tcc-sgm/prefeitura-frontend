@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { FiMail, FiLock } from 'react-icons/fi';
+import { FiLock, FiUserCheck } from 'react-icons/fi';
 
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -17,7 +17,7 @@ import Button from '../../components/Button';
 import { Container, Content, AnimationContainer, Background } from './styles';
 
 interface SignInFormData {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -34,7 +34,7 @@ const SignIn: React.FC = () => {
       formRef.current?.setErrors({});
 
       const schema = Yup.object().shape({
-        email: Yup.string().email('Digite um e-mail válido').required('E-mail obrigatório'),
+        username: Yup.string().required('Usuário obrigatório'),
         password: Yup.string().required('Senha obrigatória'),
       });
 
@@ -42,11 +42,11 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
       await signIn({
-        email: data.email,
+        username: data.username,
         password: data.password
       });
       
-      history.push('/dashboard')
+      history.push('/notices/view')
     } catch (err) {
 
       if (err instanceof Yup.ValidationError) {
@@ -72,9 +72,9 @@ const SignIn: React.FC = () => {
               <h1>Prefeitura Municipal</h1>
 
               <Input
-                name="email"
-                icon={FiMail}
-                placeholder="E-mail" />
+                name="username"
+                icon={FiUserCheck}
+                placeholder="Usuário" />
 
               <Input
                 name="password"

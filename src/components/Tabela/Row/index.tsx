@@ -9,7 +9,7 @@ interface ColunaProps {
 const Row: React.FC<ColunaProps> = ({dados}) => {
 
   return (
-      <TableRow>
+      <TableRow >
         {dados.map((dado) => (
               <Cell name={dado} />
         ))}

@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useState, useContext } from 'react';
 import auth from '../services/auth';
 
 interface SignInCredentials {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -25,7 +25,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
     const token = localStorage.getItem('@Prefeitura:token');
     const user = localStorage.getItem('@Prefeitura:user');
-
     if (token && user) {
       return { token, user: JSON.parse(user) }
     }
@@ -33,15 +32,13 @@ const AuthProvider: React.FC = ({ children }) => {
     return {} as AuthState;
   });
 
-  const signIn = useCallback(async ({ email, password }) => {
+  const signIn = useCallback(async ({ username, password }) => {
 
     const response = await auth.post('/users/signin', {
-      username: email,
+      username,
       password,
     });
-    
-    const { token, user } = response.data;
-
+    const {token, user} = response.data;
     localStorage.setItem('@Prefeitura:token', token);
     localStorage.setItem('@Prefeitura:user', JSON.stringify(user));
 

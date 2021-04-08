@@ -1,26 +1,25 @@
 import React, { useCallback, useRef } from 'react';
-import { FiUser, FiMail, FiLock, FiPhoneCall, FiCalendar
-} from 'react-icons/fi';
+import { FiUser, FiMail, FiLock, FiPhoneCall, FiUserCheck } from 'react-icons/fi';
 import { HiOutlineIdentification} from 'react-icons/hi';
-
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 
 import getValidationErrors from '../../utils/getValidationErros';
-
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { FormHandles } from '@unform/core';
-import { Form } from '@unform/web';
-import api from '../../services/api';
+import auth from '../../services/auth';
 import { useToast } from '../../hooks/toast';
-
 import { Container, Content, AnimationContainer, Background } from './styles';
 
 interface SignUpFormData {
   name: string;
   email: string;
   password: string;
+  username: string;
+  documento: string;
+  telefone: string;
 }
 
 const SignUp: React.FC = () => {
@@ -39,7 +38,7 @@ const SignUp: React.FC = () => {
         email: Yup.string().email('Digite um e-mail válido').required('E-mail obrigatório'),
         password: Yup.string().min(6, 'No minimo 6 dígitos'),
         telefone: Yup.string().required('Telefone obrigatório'),
-        data_nascimento: Yup.string().required('Data Nascimento obrigatório'),
+        username: Yup.string().required('Usuário obrigatório'),
         documento: Yup.string().required('CPF obrigatório'),
       });
 
@@ -47,12 +46,20 @@ const SignUp: React.FC = () => {
         abortEarly: false,
       });
 
-      await api.post('/users', data);
+      await auth.post('/users/signup', {
+        name: data.name,
+        username: data.username,
+        cpf: data.documento,
+        phone: data.telefone,
+        email: data.email,
+        password: data.password,
+        roles: ["ROLE_CITIZEN"],
+      });
 
       addToast({
         type: 'success',
         title: 'Cadastro realizado!',
-        description: 'Você já pode fazer seu logon no GoBarber'
+        description: 'Você já pode fazer seu logon'
       });
       history.push('/');
 
@@ -82,6 +89,11 @@ const SignUp: React.FC = () => {
               name="name"
               icon={FiUser}
               placeholder="Nome" />
+            
+            <Input
+              name="username"
+              icon={FiUserCheck}
+              placeholder="Usuário" />
 
             <Input
               name="email"
@@ -97,11 +109,6 @@ const SignUp: React.FC = () => {
               name="telefone"
               icon={FiPhoneCall}
               placeholder="Telefone" />
-
-            <Input
-              name="data_nascimento"
-              icon={FiCalendar}
-              placeholder="Data Nascimento" />
             
             <Input
               name="password"

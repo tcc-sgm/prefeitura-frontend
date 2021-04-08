@@ -16,14 +16,13 @@ const Notice: React.FC = () => {
   const [items, setItems] = useState<INotice[]>([]);
 
   useEffect(() => {
-    try {
       api.get('/noticias')
          .then((response) => {
              setItems(response.data);
-      })
-    } catch (err) {
-      
-    }
+      }).catch(err =>{
+        console.log('Noticia não encontrada')
+      }) 
+
     return undefined;
   }, []);
   return (
@@ -32,11 +31,10 @@ const Notice: React.FC = () => {
       <Content>
         <Background />
         <AnimationContainer>
-          {items.map(element =>  (
-            <Box>
-              <BoxText>
-                <h1>J{element.titulo}</h1>
-                <h2>Autor: {element.autor}</h2>
+          {items == null ? <h1>Nenhuma notícia cadastrada</h1> :items.map(element =>  (
+            <Box key={element.titulo+element.criacao}>
+              <BoxText key={element.titulo+element.criacao}>
+                <h1>{element.titulo}</h1>
                 <h2>Data: {element.criacao.substring(8,10) + '-'+ 
                      element.criacao.substring(5,7) + '-'+
                      element.criacao.substring(0,4)}</h2>

@@ -17,7 +17,7 @@ const Route: React.FC<RouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { user } = useAuth();
+  const {user} = useAuth();
 
   return (
     <ReactDOMRoute
@@ -27,7 +27,7 @@ const Route: React.FC<RouteProps> = ({
           <Component />
         ) : (
           <Redirect
-            to={{ pathname: isPrivate ? '/' : '/notices',
+            to={{ pathname: isPrivate ? '/' : '/notices/view',
                   state: { from: location },
             }}
           />

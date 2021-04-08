@@ -14,15 +14,15 @@ const Table: React.FC<ColunaProps> = ({dados, campos}) => {
   return (
     <Container >
       <table>
-        <TbHeader campos={campos}/>
+        <TbHeader key="idTabela" campos={campos}/>
         { 
           dados === undefined ? 
-          <TBoby> 
+          <TBoby key="idTBody"> 
             Nenhum Resultado encontrado 
           </TBoby> :  
-          <TBoby>       
+          <TBoby key="idTBodyReg">       
             {dados.map((dado) => (
-              <Row dados={dado} />
+              <Row key={Date.now()} dados={dado} />
             ))}
           </TBoby> 
         }
