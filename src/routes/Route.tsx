@@ -27,7 +27,9 @@ const Route: React.FC<RouteProps> = ({
           <Component />
         ) : (
           <Redirect
-            to={{ pathname: isPrivate ? '/' : '/notices/view',
+            to={{ pathname: isPrivate && 
+                 (localStorage.getItem('@Prefeitura:user') === null) ? 
+                    '/' : '/notices/view',
                   state: { from: location },
             }}
           />

@@ -15,12 +15,14 @@ const Menu:  React.FC = ()=> {
                         activeClassName="cursor-pointer text-orange-400"> Noticias
                     </NavLink>
                 </li>
-
+                {permissoes() === true ?
                 <li>
                     <NavLink to="/notices/add" 
                         activeClassName="cursor-pointer text-orange-400"> Cadastrar Noticias
                     </NavLink>
                 </li>
+                : ''
+                }
 
                 <li>
                     <NavLink to="/taxes" 
@@ -38,6 +40,24 @@ const Menu:  React.FC = ()=> {
         </nav>
     </Container>
     )
+}
+
+ function permissoes(): boolean {
+    const user = localStorage.getItem('@Prefeitura:user');
+    let isHabilitado = false;
+    if (user) {
+        const { roles } = JSON.parse(user);
+        const permissoes: Array<string> = roles;
+        permissoes.forEach( e => {
+            console.log(e);
+            
+            if(e === 'ROLE_ADMIN') {
+                isHabilitado = true;
+            }
+        });
+    }
+    
+    return isHabilitado;
 }
 
 export default Menu;
