@@ -17,7 +17,7 @@ export const Container = styled.div`
       li {
         display: inline-block;
         padding-left: 5px;
-        
+        padding-bottom: 10px;
         a {
           float:none;
           text-align:center;

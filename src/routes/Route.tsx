@@ -9,11 +9,13 @@ import { useAuth } from '../hooks/auth';
 
 interface RouteProps extends ReactDOMRouteProps {
   isPrivate ?: boolean;
+  isFuncionario ?: boolean;
   component: React.ComponentType;
 }
 
 const Route: React.FC<RouteProps> = ({
   isPrivate = false,
+  isFuncionario = false,
   component: Component,
   ...rest
 }) => {
@@ -23,13 +25,15 @@ const Route: React.FC<RouteProps> = ({
     <ReactDOMRoute
       { ...rest}
       render={ ({location}) => {
-        return isPrivate === !!user ? (
+        return (isPrivate === !!user  && !isFuncionario)? (
           <Component />
         ) : (
           <Redirect
-            to={{ pathname: isPrivate && 
-                 (localStorage.getItem('@Prefeitura:user') === null) ? 
-                    '/' : '/notices/view',
+            to={{ pathname: (isPrivate && (localStorage.getItem('@Prefeitura:user') === null)) ? 
+                  '/' :
+                  (isFuncionario && !permissoes()) ?
+                  '/access-denied' : 
+                  '/notices/view',
                   state: { from: location },
             }}
           />
@@ -39,6 +43,22 @@ const Route: React.FC<RouteProps> = ({
 
     </ReactDOMRoute>
   )
+}
+
+function permissoes(): boolean {
+  const user = localStorage.getItem('@Prefeitura:user');
+  let isHabilitado = false;
+  if (user) {
+      const { roles } = JSON.parse(user);
+      const permissoes: Array<string> = roles;
+      permissoes.forEach( e => {
+          
+          if(e === 'ROLE_ADMIN') {
+              isHabilitado = true;
+          }
+      });
+  }  
+  return isHabilitado;
 }
 
 export default Route;

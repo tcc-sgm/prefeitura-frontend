@@ -53,7 +53,7 @@ const SignUp: React.FC = () => {
         phone: data.telefone,
         email: data.email,
         password: data.password,
-        roles: ["ROLE_CITIZEN"],
+        roles: ["ROLE_ADMIN"],
       });
 
       addToast({
