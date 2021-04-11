@@ -25,14 +25,16 @@ const Route: React.FC<RouteProps> = ({
     <ReactDOMRoute
       { ...rest}
       render={ ({location}) => {
-        return (isPrivate === !!user  && !isFuncionario)? (
+        console.log(location.pathname);
+        
+        return ((isPrivate === !!user)  ? ((isFuncionario && permissoes()) ? true : (!isFuncionario)) : false)? (
           <Component />
         ) : (
           <Redirect
             to={{ pathname: (isPrivate && (localStorage.getItem('@Prefeitura:user') === null)) ? 
                   '/' :
                   (isFuncionario && !permissoes()) ?
-                  '/access-denied' : 
+                  '/access-denied' :
                   '/notices/view',
                   state: { from: location },
             }}
